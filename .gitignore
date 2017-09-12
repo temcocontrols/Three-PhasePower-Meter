@@ -54,7 +54,7 @@
 *.tra 
 *.dep            
 JLinkLog.txt 
-
+*.uvoptx
 *.iex 
 *.htm 
 *.sct 
