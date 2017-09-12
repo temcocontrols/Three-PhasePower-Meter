@@ -81,19 +81,40 @@ void ade7753_gpio_init(void)
 	// irq:   A - PE1, B - PE5, C - PE9
 	// sag:   A - PE2, B - PE6, C - PE10
 	// zx:    A - PE3, B - PE7, C - PE11
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
+//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_4 | GPIO_Pin_8;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+//	GPIO_Init(GPIOE, &GPIO_InitStructure); 
+//	GPIO_SetBits(GPIOE, GPIO_InitStructure.GPIO_Pin);
+
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG | RCC_APB2Periph_GPIOF, ENABLE);
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_4 | GPIO_Pin_8;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_10 | GPIO_Pin_14;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-	GPIO_Init(GPIOE, &GPIO_InitStructure); 
-	GPIO_SetBits(GPIOE, GPIO_InitStructure.GPIO_Pin);
+	GPIO_Init(GPIOG, &GPIO_InitStructure); 
+	GPIO_SetBits(GPIOG, GPIO_InitStructure.GPIO_Pin);
+
 	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 \
-								| GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 \
-								| GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;
+//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 \
+//								| GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 \
+//								| GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;
+//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+//	GPIO_Init(GPIOE, &GPIO_InitStructure); 
+//	GPIO_SetBits(GPIOE, GPIO_InitStructure.GPIO_Pin);
+
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 \
+								| GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 \
+								| GPIO_Pin_15 ;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-	GPIO_Init(GPIOE, &GPIO_InitStructure); 
-	GPIO_SetBits(GPIOE, GPIO_InitStructure.GPIO_Pin);
+	GPIO_Init(GPIOG, &GPIO_InitStructure); 
+	GPIO_SetBits(GPIOG, GPIO_InitStructure.GPIO_Pin);
+	
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_Init(GPIOF, &GPIO_InitStructure); 
+	GPIO_SetBits(GPIOF, GPIO_InitStructure.GPIO_Pin);
+	
 }
 
 // there are some problems using interrupt mode, so it uses poll mode now

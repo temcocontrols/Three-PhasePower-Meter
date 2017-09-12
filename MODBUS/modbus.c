@@ -33,6 +33,7 @@ u16 uart_num = 0;
 extern FIFO_BUFFER Receive_Buffer0;
 //u8 app2boot_type = 0xff;
 
+//u16 Test[50];
 void USART1_IRQHandler(void)                	//串口1中断服务程序
 {		
 	static u16 send_count = 0;
@@ -43,7 +44,9 @@ void USART1_IRQHandler(void)                	//串口1中断服务程序
 		if(modbus.protocal == MODBUS)		
 		{
 			if(revce_count < USART_REC_LEN)
+			{				
 				USART_RX_BUF[revce_count++] = USART_ReceiveData(USART1);		//读取接收到的数据
+			}
 			else
 				serial_restart();
 			
@@ -168,6 +171,7 @@ void modbus_init(void)
 	serial_restart();
 	SERIAL_RECEIVE_TIMEOUT = 3;
 	serial_receive_timeout_count = SERIAL_RECEIVE_TIMEOUT;
+//	Test[3]++;
 }
 void write_user_data_by_block(U16_T StartAdd,U8_T HeadLen,U8_T *pData) 
 {
@@ -2996,7 +3000,19 @@ void responseCmd(u8 type, u8* pData)
 				sendbuf[send_cout++] = temp2 ;
 				crc16_byte(temp1);
 				crc16_byte(temp2);
-			} 
+			}
+			else if(address >= MODBUS_TEST_START && address <= MODBUS_TEST_END)
+			{  //only for testing
+				U16_T far temp;
+				temp = Test[address - MODBUS_TEST_START];
+				
+				temp1 = (temp >> 8) & 0xFF;;
+				temp2 = temp & 0xFF;
+				sendbuf[send_cout++] = temp1 ;
+				sendbuf[send_cout++] = temp2 ;
+				crc16_byte(temp1);
+				crc16_byte(temp2);
+			}
 			else
 			{
 				temp1 = 0 ;

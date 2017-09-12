@@ -44,21 +44,21 @@ static void debug_config(void)
 int main(void)
 {
   	NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x8008000);
-//	debug_config();
+	debug_config();
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
  	delay_init(72);
 	
 //	delay_ms(3000);
 	EEP_Dat_Init();
-	printf("main\n\r");
+//	uart1_init(115200);
+	printf("\r\n main test \n\r");
 	SPI2_Init();
  	TIM3_Int_Init(100,2);
 //	SPI1_Init(); //initialise it in ade7753_init() function
-	
 	xTaskCreate( vPowerMeterTask, ( signed portCHAR * ) "PowerMeter", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL );
  	
    	xTaskCreate( vLED0Task, ( signed portCHAR * ) "LED0", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 1, NULL );
- 	xTaskCreate( vCOMMTask, ( signed portCHAR * ) "COMM", configMINIMAL_STACK_SIZE + 128, NULL, tskIDLE_PRIORITY + 3, NULL );
+ 	xTaskCreate( vCOMMTask, ( signed portCHAR * ) "COMM", configMINIMAL_STACK_SIZE + 512, NULL, tskIDLE_PRIORITY + 3, NULL );
    	xTaskCreate( vNETTask, ( signed portCHAR * ) "NET",  configMINIMAL_STACK_SIZE + 256, NULL, tskIDLE_PRIORITY + 3, NULL );
 	
 	xTaskCreate( vInputTask, ( signed portCHAR * ) "AnalogInput",  256, NULL, tskIDLE_PRIORITY + 2, NULL );
@@ -80,6 +80,7 @@ void vPowerMeterTask( void *pvParameters )
 //		if(PHASE_TEMP > 2) PHASE_TEMP = 0;
 //		else
 //			PHASE_TEMP++; 
+//		printf("\r\n vPowerMeterTask \n\r");
 		PHASE_TEMP = 1;
 		for(i=0;i<30;i++)
 		{
@@ -105,7 +106,7 @@ void vPowerMeterTask( void *pvParameters )
 			
 			delay_ms(100);
 		}
-		delay_ms(100);
+		delay_ms(1000);
 	}
 }
  

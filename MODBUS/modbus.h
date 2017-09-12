@@ -85,7 +85,7 @@ typedef struct
 }STR_MODBUS ;
 
 extern STR_MODBUS modbus ;
-
+extern u16 Test[50]; //only for test
 typedef struct
 {
 	u8 rx1_flag;

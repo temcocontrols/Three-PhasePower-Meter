@@ -32,17 +32,33 @@
 ;   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Stack_Size      EQU     0x00000800
+DATA_IN_ExtSRAM EQU 	1
+	
+Stack_Size      EQU     0x00000400
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
+	
+	
+                IF DATA_IN_ExtSRAM == 1 ; ADDED FOR EXTSRAM
+	
+__initial_sp EQU 0X20000000 + Stack_Size ;设置栈顶指针
+ 
+              ELSE
+	
 __initial_sp
+
+             ENDIF
+	  
+	
+	
+;__initial_sp
                                                   
 ; <h> Heap Configuration
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
 ; </h>
 
-Heap_Size       EQU     0x00000400
+Heap_Size       EQU     0x00000200
 
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
@@ -151,6 +167,59 @@ __Vectors_Size  EQU  __Vectors_End - __Vectors
 ; Reset handler
 Reset_Handler   PROC
                 EXPORT  Reset_Handler             [WEAK]
+					
+ IF DATA_IN_ExtSRAM == 1 ;
+	
+; ADD configure of FSMC
+				LDR R0,= 0x00000100;LDR R0,= 0x00000114
+				LDR R1,= 0x40021014
+				STR R0,[R1] ;使能FSMC时钟
+				LDR R0, =0X000001E0
+				LDR R1, =0X40021018
+				STR R0,[R1] ;GPIOD,GPIOE,GPIOF,GPIOG时钟使能
+				LDR R0,= 0xB4BB44BB
+				LDR R1,= 0x40011400 ;GPIOD->CRL
+				STR R0,[R1]
+				LDR R0,= 0xBBBBBBBB
+				LDR R1,= 0x40011404 ;GPIOD->CRH
+				STR R0,[R1] ;配置GPIOD
+				LDR R0,= 0xB44444BB
+				LDR R1,= 0x40011800 ;GPIOE->CRL
+				STR R0,[R1]
+				LDR R0,= 0xBBBBBBBB
+				LDR R1,= 0x40011804 ;GPIOE->CRH
+				STR R0,[R1] ;配置GPIOE
+				LDR R0,= 0x44BBBBBB
+				LDR R1,= 0x40011C00	;GPIOF->CRL
+				STR R0,[R1]
+				LDR R0,= 0xBBBB4444
+				LDR R1,= 0x40011C04 ;GPIOF->CRH
+				STR R0,[R1] ;配置GPIOF
+				LDR R0,= 0x44BBBBBB
+				LDR R1,= 0x40012000 ;GPIOG->CRL
+				STR R0,[R1]
+				LDR R0,= 0x44444444
+				LDR R1,= 0x40012004 ;GPIOG->CRH
+				STR R0,[R1] ;配置GPIOG
+				
+				
+				;LDR R0,= 0x00001011  ;16bit
+				LDR R0,= 0x00001001 ; 8bit
+				;选择存储类型sram，总线宽度16位，写使能，并启动存储器
+				LDR R1,= 0xA0000000 ; 	EN1
+				STR R0,[R1] ;对控制器寄存器配置完成
+				
+				
+				LDR R0,= 0x00000300 ;根据外部SRAM芯片的时序配置时序寄存器
+				LDR R1,= 0xA0000004 ; NE1 0X60000000
+				STR R0,[R1] ;时序寄存器配置完成
+				
+				LDR R0,= 0x0FFFFFFF ;根据外部SRAM芯片的时序配置时序寄存器
+				LDR R1,= 0xA0000104 ; NE1 0X60000000
+				STR R0,[R1] ;时序寄存器配置完成
+
+ ENDIF
+	 
                 IMPORT  __main
                 IMPORT  SystemInit
                 LDR     R0, =SystemInit

@@ -27,10 +27,10 @@ void vLED0Task( void *pvParameters);
 #define RX1_LED		 PAout(15) 
 #define TX1_LED		 PBout(0) 	
 
-#define Relay1_LED	 PDout(8)
-#define Relay2_LED	 PDout(10)
-#define Relay3_LED	 PDout(9)
-#define Relay4_LED	 PDout(11)
+#define Relay1_LED	 PEout(1)
+#define Relay2_LED	 PEout(2)
+#define Relay3_LED	 PEout(3)
+#define Relay4_LED	 PEout(4)
 
 
 #define Input1_LED	PAout(14) 
@@ -38,6 +38,6 @@ void vLED0Task( void *pvParameters);
 #define Input3_LED	PAout(12) 
 #define Input4_LED	PAout(11) 
 
-#define LED_HEARTBEAT	PDout(0)
+#define LED_HEARTBEAT	PEout(0)
 		 				    
 #endif

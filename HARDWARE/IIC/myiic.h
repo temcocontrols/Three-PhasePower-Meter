@@ -4,14 +4,16 @@
 #include "bitmap.h"
    	   		   
 //IO方向设置
-#define SDA_IN()	{GPIOE->CRH &= 0XF0FFFFFF; GPIOE->CRH |= ((u32)8 << 24);}
-#define SDA_OUT()	{GPIOE->CRH &= 0XF0FFFFFF; GPIOE->CRH |= ((u32)3 << 24);}
+//#define SDA_IN()	{GPIOE->CRH &= 0XF0FFFFFF; GPIOE->CRH |= ((u32)8 << 24);}
+//#define SDA_OUT()	{GPIOE->CRH &= 0XF0FFFFFF; GPIOE->CRH |= ((u32)3 << 24);}
+#define SDA_IN()	{GPIOF->CRH &= 0XFFFFFFF0; GPIOF->CRH |= ((u32)8 << 0);}
+#define SDA_OUT()	{GPIOF->CRH &= 0XFFFFFFF0; GPIOF->CRH |= ((u32)3 << 0);}
 
 //IO操作函数	 
-#define IIC_SCL		PEout(15)	//SCL
-#define IIC_SDA		PEout(14)	//SDA	 
-#define READ_SDA	PEin(14)	//输入SDA 
-#define IIC_WP		PEout(13)
+#define IIC_SCL		PFout(9)	//SCL
+#define IIC_SDA		PFout(8)	//SDA	 
+#define READ_SDA	PFin(8)	//输入SDA 
+#define IIC_WP		PFout(7)
 
 //IIC所有操作函数
 void IIC_Init(void);				//初始化IIC的IO口				 
